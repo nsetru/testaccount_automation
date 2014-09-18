@@ -15,8 +15,8 @@
  * @license    http://www.ucl.ac.uk
  */
 
-defined('MOODLE_INTERNAL') || die;
+$string['pluginname'] = 'Test accounts automation';
+$string['outputheading'] = 'Details for Test Accounts';
+$string['numtestaccounts'] = 'Number of Test Accounts';
+$string['numofdays'] = 'Number of days';
 
-$plugin->version = 2014091800;
-$plugin->requires = 2013110500;
-$plugin->component = 'local_testaccount_automation';
