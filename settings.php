@@ -17,10 +17,22 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+global $USER;
+$capabilities = array(
+    'moodle/backup:backupcourse',
+    'moodle/category:manage',
+    'moodle/course:create',
+    'moodle/site:approvecourse',
+    'moodle/course:update'
+);
 
-//if($hassiteconfig or has_any_capability($capabilities, $systemcontext)){
+$usercontext = context_user::instance($USER->id);;
+if($hassiteconfig or has_any_capability($capabilities, $usercontext)){
     $ADMIN->add('root', new admin_category('local', 'UCL Tools'));
+    /*$ADMIN->add('local', 
+        new admin_externalpage('testaccount_automation', get_string('pluginname', 'local_testaccount_automation'), 
+            $CFG->wwwroot . '/local/testaccount_automation/index.php', $capabilities));*/
     $ADMIN->add('local', 
         new admin_externalpage('testaccount_automation', get_string('pluginname', 'local_testaccount_automation'), 
-            $CFG->wwwroot . '/local/testaccount_automation/index.php', 'moodle/course:create'));
-//}
+            $CFG->wwwroot . '/local/testaccount_automation/index.php', $capabilities));
+}
