@@ -46,12 +46,38 @@ class testaccount_automation_form extends moodleform {
         $mform->addRule('testaccountemail', get_string('required'), 'required', null, 'client');
         $mform->setType('testaccountemail', PARAM_EMAIL);
         
-        $mform->addElement('select', 'courses', get_string('courses','local_testaccount_automation'), $options);
+        //$mform->addElement('select', 'courses', get_string('courses','local_testaccount_automation'), $options);
+        $buttonarray=array();
+        $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('savechanges'));
+        $buttonarray[] = &$mform->createElement('cancel');
+        $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
+        $mform->closeHeaderBefore('buttonar');
     }
     
     function validation($data, $files) {
         parent::validation($data, $files);
         
+        $data = (object)$data;
+        $err = array();
         
+        if (!empty($data->testaccoutpwd)) {
+            $error = '';
+            if(!check_password_policy($data->testaccoutpwd, $error)){
+                $err['testaccoutpwd'] = $error;
+            }
+        }
+            
+        if(!empty($data->testaccountemail)){
+            if (!validate_email($data->testaccountemail)) {
+                $err['testaccountemail'] = get_string('invalidemail');
+            }
+        }
+        
+        if (count($err) == 0){
+            return true;
+        } else {
+            return $err;
+        }
+            
     }
 }
