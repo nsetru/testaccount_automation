@@ -47,11 +47,12 @@ class testaccount_automation_form extends moodleform {
         $mform->setType('testaccountemail', PARAM_EMAIL);
         
         //$mform->addElement('select', 'courses', get_string('courses','local_testaccount_automation'), $options);
-        $buttonarray=array();
+        /*$buttonarray=array();
         $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('savechanges'));
         $buttonarray[] = &$mform->createElement('cancel');
         $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
-        $mform->closeHeaderBefore('buttonar');
+        $mform->closeHeaderBefore('buttonar');*/
+        $this->add_action_buttons(true);
     }
     
     function validation($data, $files) {

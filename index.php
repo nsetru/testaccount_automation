@@ -17,23 +17,28 @@ require(dirname(__FILE__) . '/../../config.php');
 require($CFG->dirroot.'/local/testaccount_automation/forms/testaccount_automation_form.php');
 require($CFG->dirroot.'/local/testaccount_automation/lib.php');
 
+$course     = required_param('id',PARAM_INT);
+
 global $PAGE, $OUTPUT, $USER;
 
 require_login();
+
+$redirecturl = new moodle_url('/course/view.php', array('id' => $course));
 
 $PAGE->set_pagelayout('admin');
 $PAGE->set_url('/local/testaccount_automation/index.php');
 $PAGE->set_title(get_string('pluginname','local_testaccount_automation'));
 $PAGE->set_heading('Test');
 
+
 //display a form
-//get data for form
 $testaccountform = new testaccount_automation_form();
+$testaccountform->set_data(array('testaccountemail' => $USER->email));
 
 if ($testaccountform->is_cancelled()){
-    
+    redirect($redirecturl);
 } else if ($from_testaccountform = $testaccountform->get_data()){
-    
+    //get data for form
 } else {
     
     
