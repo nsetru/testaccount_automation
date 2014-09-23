@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/testaccount_automation/db" VERSION="20140923" COMMENT="XMLDB file for Moodle local/testaccount_automation"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="mdl_testaccounts" COMMENT="stores details of test accounts associated with course admin/tutor">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseadminid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="userid of courseadmin/tutor"/>
+        <FIELD NAME="testaccountid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="userid of test accounts as stored in mdl_user table"/>
+        <FIELD NAME="active" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="Is test account active/inactive"/>
+        <FIELD NAME="datecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date test account was created"/>
+        <FIELD NAME="days" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="5" SEQUENCE="false" COMMENT="number of days test account is active"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>

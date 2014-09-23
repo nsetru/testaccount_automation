@@ -10,7 +10,7 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');    ///  It must be included from a Moodle page
 }
 
-require_once($CFG->dirroot.'/lib/formslib.php');
+require_once($CFG->libdir . '/formslib.php');
 
 class testaccount_automation_form extends moodleform {
     
@@ -18,6 +18,7 @@ class testaccount_automation_form extends moodleform {
         global $CFG;
         
         $mform = $this->_form;
+        $courseid = $this->_customdata['courseid'];
         
         //$mform->addElement('header', 'settingsheader', 'Details for Test accounts');
         $options = array (
@@ -36,10 +37,10 @@ class testaccount_automation_form extends moodleform {
         $mform->addElement('select', 'numofdays', get_string('numofdays','local_testaccount_automation'), $options1);
         $mform->addHelpButton('numofdays', 'numofdays', 'local_testaccount_automation');
         
-        $mform->addElement('passwordunmask', 'testaccoutpwd', get_string('testaccoutpwd','local_testaccount_automation'), 'size="20"');
-        $mform->addHelpButton('testaccoutpwd', 'testaccoutpwd', 'local_testaccount_automation');
-        $mform->addRule('testaccoutpwd', get_string('required'), 'required', null, 'client');
-        $mform->setType('testaccoutpwd', PARAM_RAW);
+        $mform->addElement('passwordunmask', 'testaccountpwd', get_string('testaccountpwd','local_testaccount_automation'), 'size="20"');
+        $mform->addHelpButton('testaccountpwd', 'testaccountpwd', 'local_testaccount_automation');
+        $mform->addRule('testaccountpwd', get_string('required'), 'required', null, 'client');
+        $mform->setType('testaccountpwd', PARAM_RAW);
         
         $mform->addElement('text', 'testaccountemail', get_string('testaccountemail','local_testaccount_automation'), 'maxlength="100" size="30"');
         $mform->addHelpButton('testaccountemail', 'testaccountemail', 'local_testaccount_automation');
@@ -52,6 +53,13 @@ class testaccount_automation_form extends moodleform {
         $buttonarray[] = &$mform->createElement('cancel');
         $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
         $mform->closeHeaderBefore('buttonar');*/
+        /*$mform->addElement('hidden', 'courseid');
+        $mform->setType('courseid', PARAM_INT);
+        $mform->setDefault('courseid', $courseid);*/
+        $mform->addElement('hidden', 'course', null);
+        $mform->setType('course', PARAM_INT);
+        $mform->setDefault('course', $courseid);
+        
         $this->add_action_buttons(true);
     }
     

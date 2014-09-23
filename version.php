@@ -17,6 +17,6 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version = 2014091800;
+$plugin->version = 2014092300;
 $plugin->requires = 2013110500;
 $plugin->component = 'local_testaccount_automation';
