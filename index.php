@@ -39,7 +39,10 @@ if ($testaccountform->is_cancelled()){
     $courseadmin->id = $USER->id;
     //get data for form
     $data = testaccount_automation_processuserdata($from_testaccountform, $courseadmin);
-    echo $data;
+    //echo $data;
+    print '<pre>';
+    var_dump($data);
+    print '</pre>';
     
 } else {
     

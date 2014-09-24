@@ -4,7 +4,7 @@
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="mdl_testaccounts" COMMENT="stores details of test accounts associated with course admin/tutor">
+    <TABLE NAME="testaccounts" COMMENT="stores details of test accounts associated with course admin/tutor">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="courseadminid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="userid of courseadmin/tutor"/>

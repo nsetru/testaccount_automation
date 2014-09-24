@@ -22,6 +22,7 @@ class testaccount_automation_form extends moodleform {
         
         //$mform->addElement('header', 'settingsheader', 'Details for Test accounts');
         $options = array (
+            '1' => '1',
             '5' => '5',
             '10' => '10',
             '15' => '15'
@@ -30,6 +31,7 @@ class testaccount_automation_form extends moodleform {
         $mform->addHelpButton('numtestaccounts', 'numtestaccounts', 'local_testaccount_automation');
         
         $options1 = array (
+            '1' => '1 day',
             '5' => '5 days',
             '10' => '10 days',
             '15' => '15 days'
