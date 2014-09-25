@@ -39,6 +39,10 @@ class testaccount_automation_form extends moodleform {
         $mform->addElement('select', 'numofdays', get_string('numofdays','local_testaccount_automation'), $options1);
         $mform->addHelpButton('numofdays', 'numofdays', 'local_testaccount_automation');
         
+        if (!empty($CFG->passwordpolicy)){
+            $mform->addElement('static', 'passwordpolicyinfo', '', print_password_policy());
+        }
+        
         $mform->addElement('passwordunmask', 'testaccountpwd', get_string('testaccountpwd','local_testaccount_automation'), 'size="20"');
         $mform->addHelpButton('testaccountpwd', 'testaccountpwd', 'local_testaccount_automation');
         $mform->addRule('testaccountpwd', get_string('required'), 'required', null, 'client');
@@ -71,10 +75,10 @@ class testaccount_automation_form extends moodleform {
         $data = (object)$data;
         $err = array();
         
-        if (!empty($data->testaccoutpwd)) {
+        if (!empty($data->testaccountpwd)) {
             $error = '';
-            if(!check_password_policy($data->testaccoutpwd, $error)){
-                $err['testaccoutpwd'] = $error;
+            if(!check_password_policy($data->testaccountpwd, $error)){
+                $err['testaccountpwd'] = $error;
             }
         }
             

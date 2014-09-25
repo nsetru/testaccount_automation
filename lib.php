@@ -17,7 +17,7 @@ require_once ("$CFG->dirroot/user/lib.php");
  * @param type $courseadmin
  * @return string
  */
-function testaccount_automation_processuserdata($testaccountdata, $courseadmin){
+/*function testaccount_automation_processuserdata($testaccountdata, $courseadmin){
     
     $testuserscreated = array(); 
     $numtestaccounts = $testaccountdata->numtestaccounts;
@@ -54,7 +54,7 @@ function testaccount_automation_processuserdata($testaccountdata, $courseadmin){
  * @param type $count
  * @return string
  */
-function testaccount_automation_generateusername($courseadmin, $count){
+/*function testaccount_automation_generateusername($courseadmin, $count){
     global $DB;
    
     //get list of test useraccounts associated with this course admin
@@ -81,7 +81,7 @@ function testaccount_automation_generateusername($courseadmin, $count){
  * @param type $courseadmin
  * @return string
  */
-function testaccount_automation_createusername($testuseraccounts, $courseadmin){
+/*function testaccount_automation_createusername($testuseraccounts, $courseadmin){
     global $DB;
     
     /**
@@ -95,12 +95,12 @@ function testaccount_automation_createusername($testuseraccounts, $courseadmin){
     }
      * 
      */
-    $lastid = $DB->get_field_sql("SELECT MAX(id) FROM {testaccounts}");
+    /*$lastid = $DB->get_field_sql("SELECT MAX(id) FROM {testaccounts}");
     $lastid = $lastid + 1;
     $testusername = $courseadmin->username.'_s'.$lastid;
     
     return $testusername;
-}
+}*/
 
 /**
  * 
@@ -110,7 +110,7 @@ function testaccount_automation_createusername($testuseraccounts, $courseadmin){
  * @param type $courseadmin
  * @return boolean
  */
-function testaccount_automation_createtestuser($testaccountdata, $courseadmin){
+/*function testaccount_automation_createtestuser($testaccountdata, $courseadmin){
     global $CFG, $DB;
     static $counter = 0;
        
@@ -146,7 +146,7 @@ function testaccount_automation_createtestuser($testaccountdata, $courseadmin){
     }else{
         return false;
     }
-}
+}*/
 
 /**
  * 
@@ -158,6 +158,7 @@ function testaccount_automation_printtable($users){
     
     $table = new html_table();
     $table->width = "95%";
+    $table->head = array('username', 'fullname', 'email');
     $columns = array('username','fullname', 'email');
     
     $namefields = get_all_user_name_fields(true);
@@ -171,4 +172,43 @@ function testaccount_automation_printtable($users){
         );
     }
     return $table;
+}
+
+/**
+ * 
+ * @global type $CFG
+ * @global type $PAGE
+ * @param type $settingsnav
+ * @param type $context
+ * @return type
+ */
+function local_testaccount_automation_extends_settings_navigation($settingsnav, $context) {
+    global $CFG, $PAGE;
+ 
+    // Only add this settings item on non-site course pages.
+    if (!$PAGE->course or $PAGE->course->id == 1) {
+        return;
+    }
+ 
+    // Only let users with the appropriate capability see this settings item.
+    if (!has_capability('moodle/backup:backupcourse', context_course::instance($PAGE->course->id))) {
+        return;
+    }
+ 
+    if ($settingnode = $settingsnav->find('courseadmin', navigation_node::TYPE_COURSE)) {
+        $strfoo = get_string('createtestaccounts', 'local_testaccount_automation');
+        $url = new moodle_url('/local/testaccount_automation/index.php', array('course' => $PAGE->course->id));
+        $foonode = navigation_node::create(
+            $strfoo,
+            $url,
+            navigation_node::NODETYPE_LEAF,
+            'testaccount_automation',
+            'testaccount_automation',
+            new pix_icon('t/addcontact', $strfoo)
+        );
+        if ($PAGE->url->compare($url, URL_MATCH_BASE)) {
+            $foonode->make_active();
+        }
+        $settingnode->add_node($foonode);
+    }
 }

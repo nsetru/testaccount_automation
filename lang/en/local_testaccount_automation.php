@@ -16,7 +16,8 @@
  */
 
 $string['pluginname'] = 'Test accounts automation';
-$string['outputheading'] = 'Details for Test Accounts';
+$string['createtestaccounts'] = 'Create Test User Accounts';
+$string['outputheading'] = 'Details for Test User Accounts';
 
 //form 
 $string['numtestaccounts'] = 'Number of Test Accounts';
@@ -28,4 +29,7 @@ $string['testaccountpwd_help'] = 'Help on Passwod for Test Accounts';
 $string['testaccountemail'] = 'Email for Test Accounts';
 $string['testaccountemail_help'] = 'Help on Email for Test Accounts';
 $string['successnotification'] = 'Test user accounts created for user : {$a}';
+
+//capability
+$string['testaccount_automation:create'] = 'Create Test User Accounts';
 

@@ -27,7 +27,7 @@ $capabilities = array(
 );
 
 $usercontext = context_user::instance($USER->id);;
-if($hassiteconfig or has_any_capability($capabilities, $usercontext)){
+//if($hassiteconfig or has_any_capability($capabilities, $usercontext)){
     $ADMIN->add('root', new admin_category('local', 'UCL Tools'));
     /*$ADMIN->add('local', 
         new admin_externalpage('testaccount_automation', get_string('pluginname', 'local_testaccount_automation'), 
@@ -35,4 +35,4 @@ if($hassiteconfig or has_any_capability($capabilities, $usercontext)){
     $ADMIN->add('local', 
         new admin_externalpage('testaccount_automation', get_string('pluginname', 'local_testaccount_automation'), 
             $CFG->wwwroot . '/local/testaccount_automation/index.php', $capabilities));
-}
+//}
