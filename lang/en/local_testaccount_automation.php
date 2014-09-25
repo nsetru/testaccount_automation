@@ -27,4 +27,5 @@ $string['testaccountpwd'] = 'Password for Test Accounts';
 $string['testaccountpwd_help'] = 'Help on Passwod for Test Accounts';
 $string['testaccountemail'] = 'Email for Test Accounts';
 $string['testaccountemail_help'] = 'Help on Email for Test Accounts';
+$string['successnotification'] = 'Test user accounts created for user : {$a}';
 

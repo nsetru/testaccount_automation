@@ -12,7 +12,7 @@ require(dirname(__FILE__) . '/../../config.php');
 require($CFG->dirroot.'/local/testaccount_automation/forms/testaccount_automation_form.php');
 require($CFG->dirroot.'/local/testaccount_automation/lib.php');
 
-//$course     = required_param('id',PARAM_INT);
+// we need courseid to know- which course user test accounts needs to be enrolled
 $courseid = optional_param('course', 0, PARAM_INT);
 
 global $PAGE, $OUTPUT, $USER;
@@ -26,7 +26,6 @@ $PAGE->set_url('/local/testaccount_automation/index.php');
 $PAGE->set_title(get_string('pluginname','local_testaccount_automation'));
 $PAGE->set_heading('Test');
 
-
 //display a form
 $testaccountform = new testaccount_automation_form(null, array('courseid' => $courseid));
 $testaccountform->set_data(array('testaccountemail' => $USER->email));
@@ -39,6 +38,20 @@ if ($testaccountform->is_cancelled()){
     $courseadmin->id = $USER->id;
     //get data for form
     $data = testaccount_automation_processuserdata($from_testaccountform, $courseadmin);
+    
+    echo $OUTPUT->header();
+    echo $OUTPUT->heading(get_string('successnotification', 'local_testaccount_automation', $courseadmin->username));
+    echo $OUTPUT->box_start('generalbox boxaligncenter boxwidthwide');
+    //echo html_writer::tag('p', get_string('successnotification', 'local_testaccount_notification'));
+    $table = testaccount_automation_printtable($data);
+    echo html_writer::table($table);
+    $actionurl = new moodle_url('/course/view.php', array('id' => $courseid));
+    $continue = new single_button($actionurl, get_string('continue'), 'post');
+    echo $OUTPUT->render($continue);
+    echo $OUTPUT->box_end();
+    echo $OUTPUT->footer();
+    die;
+    
     //echo $data;
     print '<pre>';
     var_dump($data);

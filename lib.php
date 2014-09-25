@@ -18,10 +18,10 @@ require_once ("$CFG->dirroot/user/lib.php");
  * @return string
  */
 function testaccount_automation_processuserdata($testaccountdata, $courseadmin){
-    $testuserscreated = array();
     
+    $testuserscreated = array(); 
     $numtestaccounts = $testaccountdata->numtestaccounts;
-    //validate test accounts before saving
+    //validate test accounts before saving?
    
     //create user within mdl_user table
     $i=1;
@@ -37,6 +37,8 @@ function testaccount_automation_processuserdata($testaccountdata, $courseadmin){
         //populate array with created test user accounts
         if(!empty($testuseraccountid)){
             $testuserscreated[$testuseraccountid] = $testaccountdata->username;
+        }else{
+            $testuserscreated['error'] = 'Could not create test user account - $testaccountdata->username';
         }
         
         $i++;
@@ -82,6 +84,7 @@ function testaccount_automation_generateusername($courseadmin, $count){
 function testaccount_automation_createusername($testuseraccounts, $courseadmin){
     global $DB;
     
+    /**
     $testuseraccount = current($testuseraccounts);
     $username = $DB->get_field('user', 'username', array('id' => $testuseraccount->testaccountid));
     $usernametmp = explode('_', $username);
@@ -90,6 +93,12 @@ function testaccount_automation_createusername($testuseraccounts, $courseadmin){
     if(!empty($count)){
         $testusername = $courseadmin->username.'_s'.$count;
     }
+     * 
+     */
+    $lastid = $DB->get_field_sql("SELECT MAX(id) FROM {testaccounts}");
+    $lastid = $lastid + 1;
+    $testusername = $courseadmin->username.'_s'.$lastid;
+    
     return $testusername;
 }
 
@@ -103,8 +112,9 @@ function testaccount_automation_createusername($testuseraccounts, $courseadmin){
  */
 function testaccount_automation_createtestuser($testaccountdata, $courseadmin){
     global $CFG, $DB;
+    static $counter = 0;
        
-    //set few default values to create new user
+    //set few values to create new user
     $usernew->auth = 'manual';
     $usernew->deleted = 0;
     $usernew->mnethostid = $CFG->mnet_localhost_id; // always local user
@@ -116,7 +126,7 @@ function testaccount_automation_createtestuser($testaccountdata, $courseadmin){
     $usernew->lastname = 'testaccount';
     $usernew->username = $testaccountdata->username;
             
-    //call standard _user_create_user function
+    //call standard user_create_user() moodle function to create users
     $usernew->id = user_create_user($usernew, false, false);
         
     //insert details of test account into mdl_testaccounts table
@@ -138,3 +148,27 @@ function testaccount_automation_createtestuser($testaccountdata, $courseadmin){
     }
 }
 
+/**
+ * 
+ * @global type $DB
+ * @param type $users
+ */
+function testaccount_automation_printtable($users){
+    global $DB;
+    
+    $table = new html_table();
+    $table->width = "95%";
+    $columns = array('username','fullname', 'email');
+    
+    $namefields = get_all_user_name_fields(true);
+    foreach($users as $key => $value) {
+        $user = $DB->get_record('user', array('id' => $key), 'id, ' . $namefields . ', username, email');
+        $user->fullname = fullname($user, true);
+        $table->data[] = array (
+            '<a href="'.$CFG->wwwroot.'/user/view.php?id='.$user->id.'&amp;course='.SITEID.'">'.$user->username.'</a>',
+            $user->fullname,
+            $user->email
+        );
+    }
+    return $table;
+}
