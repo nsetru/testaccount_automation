@@ -11,7 +11,7 @@
 require(dirname(__FILE__) . '/../../config.php');
 require($CFG->dirroot.'/local/testaccount_automation/forms/testaccount_automation_form.php');
 require($CFG->dirroot.'/local/testaccount_automation/lib.php');
-require($CFG->dirroot.'/local/testaccount_automation/classes/testaccount_automation.php');
+require($CFG->dirroot.'/local/testaccount_automation/classes/testaccount_automation_create.php');
 
 // we need courseid to know- which course user test accounts needs to be enrolled
 $courseid = optional_param('course', 0, PARAM_INT);
@@ -35,11 +35,12 @@ if ($testaccountform->is_cancelled()){
     redirect($redirecturl);
 } else if ($from_testaccountform = $testaccountform->get_data()){
     $courseadmin = (object)$courseadmin;
-    $courseadmin->username = $USER->username;
     $courseadmin->id = $USER->id;
+    $courseadmin->username = $USER->username;
+    $courseadmin->email = $USER->email;
     //process data from form
     //$data = testaccount_automation_processuserdata($from_testaccountform, $courseadmin);
-    $class = new testaccount_automation();
+    $class = new testaccount_automation_create();
     $returndata = $class->testaccount_automation_processuserdata($from_testaccountform, $courseadmin);
     
     echo $OUTPUT->header();
