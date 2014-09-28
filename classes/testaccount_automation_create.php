@@ -129,11 +129,14 @@ class testaccount_automation_create {
     
     private function testaccount_automation_sendemail($testusers, stdClass $courseadmin){
         global $DB;
-        //get course admin details 
-        
+        //get course admin details
         $touser = $DB->get_record('user', array('id' => $courseadmin->id));
-        $message = '<body><table border="0" cellpadding="3" cellspacing="0" width="95%">';
-        $message .= '<tr>'
+        $testuserscount = count($testusers);
+
+        //email meesage body
+        $message = '<body>';
+        $message .= '<table border="0" cellpadding="3" cellspacing="0" width="95%">'
+                . '<tr>'
                 . '<th>user</th><th>fullname</th><th>email</th>Created date<th></th><th>Expired date</th>'
                 . '</tr>';
         $namefields = get_all_user_name_fields(true);
@@ -147,16 +150,21 @@ class testaccount_automation_create {
                     . '<td>'.$testuser->fullname.'</td>'
                     . '<td>'.$testuser->email.'</td>'
                     . '<td>'.$createddate.'</td>'
-                    . '<td>'.$expirydate.'</td></tr>';
+                    . '<td>'.$expirydate.'</td>'
+                    . '</tr>';
         }
         $message .= '</table></body>';
-        
-        $subject = 'Test message';
+        $messagetext = $message;
+        $messagehtml = text_to_html($messagetext, null, false, true);
+
+        //email subject
+        $subject = get_string('emailsubject', 'local_testaccount_automation', $testuserscount);
+        //from email-address
         $supportuser = core_user::get_support_user();
         
         if ($message) {
             // Directly email rather than using the messaging system to ensure its not routed to a popup or jabber.
-            email_to_user($touser, $supportuser, $subject, $message);
+            email_to_user($touser, $supportuser, $subject, $messagetext);
         }
     }
 

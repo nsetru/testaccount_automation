@@ -21,15 +21,18 @@ $string['outputheading'] = 'Details for Test User Accounts';
 
 //form 
 $string['numtestaccounts'] = 'Number of Test Accounts';
-$string['numtestaccounts_help'] = 'Help on Number of test accounts';
+$string['numtestaccounts_help'] = 'Number of test-user accounts the user could create in this request.';
 $string['numofdays'] = 'Number of days';
-$string['numofdays_help'] = 'Help on Number of days';
+$string['numofdays_help'] = 'Number of days test-user accounts are requested. After days are expired the test-user accounts are deleted.';
 $string['testaccountpwd'] = 'Password for Test Accounts';
-$string['testaccountpwd_help'] = 'Help on Passwod for Test Accounts';
+$string['testaccountpwd_help'] = 'Password to access test-user accounts.';
 $string['testaccountemail'] = 'Email for Test Accounts';
-$string['testaccountemail_help'] = 'Help on Email for Test Accounts';
-$string['successnotification'] = 'Test user accounts created for user : {$a}';
+$string['testaccountemail_help'] = 'Email address for test-user accounts';
+$string['successnotification'] = 'Test-user accounts created for user : {$a}';
 
 //capability
 $string['testaccount_automation:create'] = 'Create Test User Accounts';
+
+//email
+$string['emailsubject'] = '{$a} test-user account details';
 
