@@ -77,3 +77,12 @@ function local_testaccount_automation_extends_settings_navigation($settingsnav, 
 }
 
 //set cron job function
+
+function local_testaccount_automation_cron(){
+    global $DB;
+    // get createdtime and no of days of all test users
+
+    // check if no of days has expired
+    // delete user from mdl_user table and un-enrol from activities and courses by calling standard delete_user() moodle core funcion
+    //update 'active' field in mdl_testaccounts table to '0'
+}
