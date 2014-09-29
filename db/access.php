@@ -1,6 +1,8 @@
 <?php
 
 /**
+ * Handle Capabilities
+ * 
  * @package local
  * @subpackage testaccount_automation
  * @copyright  2014 UCL

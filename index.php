@@ -27,6 +27,20 @@ $PAGE->set_url('/local/testaccount_automation/index.php');
 $PAGE->set_title(get_string('pluginname','local_testaccount_automation'));
 $PAGE->set_heading('Test Account Automation');
 
+
+// set courseadmin details
+$courseadmin = (object) $courseadmin;
+$courseadmin->id = $USER->id;
+$courseadmin->username = $USER->username;
+$courseadmin->email = $USER->email;
+
+// check if user has already exhausted on number of test accounts allowed to create. max limit-15
+$class = new testaccount_automation_create();
+$limitexceeds = $class->testaccount_automation_checklimitexceeds($courseadmin);
+if($limitexceeds){
+    die;
+}
+
 //display a form
 $testaccountform = new testaccount_automation_form(null, array('courseid' => $courseid));
 $testaccountform->set_data(array('testaccountemail' => $USER->email));
@@ -34,13 +48,12 @@ $testaccountform->set_data(array('testaccountemail' => $USER->email));
 if ($testaccountform->is_cancelled()){
     redirect($redirecturl);
 } else if ($from_testaccountform = $testaccountform->get_data()){
-    $courseadmin = (object)$courseadmin;
+    /*$courseadmin = (object)$courseadmin;
     $courseadmin->id = $USER->id;
     $courseadmin->username = $USER->username;
-    $courseadmin->email = $USER->email;
-    //process data from form
-    //$data = testaccount_automation_processuserdata($from_testaccountform, $courseadmin);
-    $class = new testaccount_automation_create();
+    $courseadmin->email = $USER->email;*/
+    //process form data
+    //$class = new testaccount_automation_create();
     $returndata = $class->testaccount_automation_processuserdata($from_testaccountform, $courseadmin);
     
     echo $OUTPUT->header();

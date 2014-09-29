@@ -10,6 +10,24 @@ require_once ("$CFG->dirroot/user/lib.php");
  */
 class testaccount_automation_create {
     //define constants
+    const MAX_ACCOUNTS_LIMIT   =   15; //max test-user accounts a user can create
+    
+    /**
+     * 
+     * @global type $DB
+     * @param stdClass $courseadmin
+     * @return boolean
+     */
+    public function testaccount_automation_checklimitexceeds(stdClass $courseadmin){
+        global $DB;
+        
+        $testaccountscount = $DB->count_records('testaccounts', array('courseadminid' => $courseadmin->id, 'active' => 1));
+        if($testaccountscount >= self::MAX_ACCOUNTS_LIMIT){
+            return true;
+        }else{
+            return false;
+        }
+    }
     
     /**
      * 
