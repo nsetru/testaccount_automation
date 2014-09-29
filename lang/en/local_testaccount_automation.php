@@ -34,5 +34,5 @@ $string['successnotification'] = 'Test-user accounts created for user : {$a}';
 $string['testaccount_automation:create'] = 'Create Test User Accounts';
 
 //email
-$string['emailsubject'] = '{$a} test-user account details';
+$string['emailsubject'] = 'Test-user account details';
 

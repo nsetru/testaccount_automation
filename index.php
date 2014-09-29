@@ -25,7 +25,7 @@ $redirecturl = new moodle_url('/course/view.php', array('id' => $courseid));
 $PAGE->set_pagelayout('admin');
 $PAGE->set_url('/local/testaccount_automation/index.php');
 $PAGE->set_title(get_string('pluginname','local_testaccount_automation'));
-$PAGE->set_heading('Test');
+$PAGE->set_heading('Test Account Automation');
 
 //display a form
 $testaccountform = new testaccount_automation_form(null, array('courseid' => $courseid));
@@ -55,16 +55,9 @@ if ($testaccountform->is_cancelled()){
     echo $OUTPUT->box_end();
     echo $OUTPUT->footer();
     die;
-    
-    //echo $data;
-    print '<pre>';
-    var_dump($data);
-    print '</pre>';
-    
-} else {
-    
-    
-}
+     
+} 
+
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('outputheading', 'local_testaccount_automation'));
 $testaccountform->display();

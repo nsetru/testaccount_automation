@@ -115,8 +115,9 @@ class testaccount_automation_create {
             $testaccount->courseadminid = $courseadmin->id;
             $testaccount->testaccountid = $usernew->id;
             $testaccount->active = 1;
-            $testaccount->datecreated = time();
+            $testaccount->datecreated = $usernew->timecreated;
             $testaccount->days = $testaccountdata->numofdays;
+            $testaccount->dateexpired = $this->testaccount_automation_getexpirydate($testaccount->datecreated, $testaccount->days);
             $result = $DB->insert_record('testaccounts', $testaccount);
         }
 
@@ -127,6 +128,21 @@ class testaccount_automation_create {
         }
     }
     
+    private function testaccount_automation_getexpirydate($datecreated, $days){
+        if(!empty($datecreated) && !empty($days)){
+            $dateexpired = strtotime('+'.$days.' days', $datecreated);
+            return $dateexpired;
+        }
+        
+        return false;
+    }
+    
+    /**
+     * 
+     * @global type $DB
+     * @param type $testusers
+     * @param stdClass $courseadmin
+     */
     private function testaccount_automation_sendemail($testusers, stdClass $courseadmin){
         global $DB;
         //get course admin details
@@ -134,37 +150,49 @@ class testaccount_automation_create {
         $testuserscount = count($testusers);
 
         //email meesage body
-        $message = '<body>';
-        $message .= '<table border="0" cellpadding="3" cellspacing="0" width="95%">'
-                . '<tr>'
-                . '<th>user</th><th>fullname</th><th>email</th>Created date<th></th><th>Expired date</th>'
-                . '</tr>';
+        $message = "<head> You have created $testuserscount test-user accounts. These test-user accounts are owned by Username:$courseadmin->username . </head>"
+                . "<br /><br />"
+                . "<body id=\"email\"><table border=\"0\" cellpadding=\"3\" cellspacing=\"0\" width=\"95%\">";
+        $message .= "<tr>"
+                . "<th>user</th>"
+                . "<th>fullname</th>"
+                . "<th>email</th>"
+                . "<th>Created date</th>"
+                . "<th>Expiry date</th>"
+                . "</tr>";
+        
         $namefields = get_all_user_name_fields(true);
         foreach ($testusers as $key => $value) {
             $testuser = $DB->get_record('user', array('id' => $key), 'id, ' . $namefields . ', username, email');
             $testuserdetail = $DB->get_record('testaccounts', array('testaccountid' => $key));
             $testuser->fullname = fullname($testuser, true);
             $createddate = date('d-m-Y H:i:s', $testuserdetail->datecreated);
-            $expirydate = date('d-m-Y H:i:s', strtotime('+'.$testuserdetail->days.' days'));
+            $expirydate = date('d-m-Y H:i:s', $testuserdetail->dateexpired);
             $message .= '<tr><td>'.$testuser->username.'</td>'
                     . '<td>'.$testuser->fullname.'</td>'
                     . '<td>'.$testuser->email.'</td>'
                     . '<td>'.$createddate.'</td>'
                     . '<td>'.$expirydate.'</td>'
-                    . '</tr>';
+                    . "</tr>";
         }
-        $message .= '</table></body>';
-        $messagetext = $message;
-        $messagehtml = text_to_html($messagetext, null, false, true);
+        $message .= "</table><br />";
+        
+        $message .= "<p><b>Please note: These test-user accounts will be deleted after expiry date and can no longer be accessed.</b></p>"
+                . "</body>";
+        
+        $messagehtml = $message;
+        $messagetext = html_to_text($message);
+        
 
         //email subject
         $subject = get_string('emailsubject', 'local_testaccount_automation', $testuserscount);
+ 
         //from email-address
         $supportuser = core_user::get_support_user();
         
         if ($message) {
             // Directly email rather than using the messaging system to ensure its not routed to a popup or jabber.
-            email_to_user($touser, $supportuser, $subject, $messagetext);
+            email_to_user($touser, $supportuser, $subject, $messagetext, $messagehtml);
         }
     }
 

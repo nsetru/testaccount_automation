@@ -38,6 +38,7 @@ function testaccount_automation_printtable($users){
 }
 
 /**
+ * function to extend
  * 
  * @global type $CFG
  * @global type $PAGE
@@ -76,13 +77,45 @@ function local_testaccount_automation_extends_settings_navigation($settingsnav, 
     }
 }
 
-//set cron job function
 
+/**
+ * Cron to delete expired test-user accounts
+ * 
+ * set cron job function 
+ * @global type $DB
+ */
 function local_testaccount_automation_cron(){
     global $DB;
-    // get createdtime and no of days of all test users
-
-    // check if no of days has expired
-    // delete user from mdl_user table and un-enrol from activities and courses by calling standard delete_user() moodle core funcion
-    //update 'active' field in mdl_testaccounts table to '0'
+    
+    mtrace('Delete expired test-user accounts.. ');
+    // get expiry date of all test users
+    $currenttime = time();
+    $sql = 'SELECT * from {testaccounts} where dateexpired < :currenttime';
+    $expiredtestusers = $DB->get_records_sql($sql, array('currenttime' => $currenttime));
+    // get test-user accounts that have passed expired date
+    if(!empty($expiredtestusers)){
+        foreach($expiredtestusers as $testuser){
+            $user = $DB->get_record('user', array('id' => $testuser->testaccountid));
+            
+            try{
+                // delete user from mdl_user table and un-enrol from activities and courses by calling standard delete_user() moodle core funcion 
+                mtrace("Deleting $user->username test-user account..");
+                $deleted = delete_user($user);
+                //update 'active' field in mdl_testaccounts table to '0'
+                if ($deleted) {
+                    $updaterecord = new stdClass();
+                    $updaterecord->id = $testuser->id;
+                    $updaterecord->active = 0;
+                    $DB->update_record('testaccounts', $updaterecord);
+                }
+            } catch (Exception $ex) {
+                mtrace('Error deleting '.$user->username.' test-user account: ' . $ex->getMessage());
+            }
+                        
+            $expirydate = date('d-m-Y', $testuser->dateexpired);
+            mtrace("Username : $user->username deleted. Test-user account expired on:$expirydate.. ");
+            
+        }
+    }
+    
 }

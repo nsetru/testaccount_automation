@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/testaccount_automation/db" VERSION="2014092500" COMMENT="XMLDB file for Moodle local/testaccount_automation"
+<XMLDB PATH="local/testaccount_automation/db" VERSION="20140929" COMMENT="XMLDB file for Moodle local/testaccount_automation"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -12,6 +12,7 @@
         <FIELD NAME="active" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="Is test account active/inactive"/>
         <FIELD NAME="datecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date test account was created"/>
         <FIELD NAME="days" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="5" SEQUENCE="false" COMMENT="number of days test account is active"/>
+        <FIELD NAME="dateexpired" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The date test accounts will expire"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
