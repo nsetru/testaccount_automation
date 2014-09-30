@@ -37,6 +37,12 @@ function testaccount_automation_printtable($users){
     return $table;
 }
 
+function testaccount_automation_printalltestusers($courseadmin){
+    global $DB;
+
+
+}
+
 /**
  * function to extend
  * 

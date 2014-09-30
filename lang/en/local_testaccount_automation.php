@@ -29,6 +29,7 @@ $string['testaccountpwd_help'] = 'Password to access test-user accounts.';
 $string['testaccountemail'] = 'Email for Test Accounts';
 $string['testaccountemail_help'] = 'Email address for test-user accounts';
 $string['successnotification'] = 'Test-user accounts created for user : {$a}';
+$string['limitexceednotification'] = 'Sorry! Username:{$a} allowed to create maximum of 15 test-user accounts. You have exceeded the limit. Please re-use existing test-user accounts';
 
 //capability
 $string['testaccount_automation:create'] = 'Create Test User Accounts';
