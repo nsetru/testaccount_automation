@@ -32,7 +32,9 @@ $string['successnotification'] = 'Test-user accounts created for user : {$a}';
 $string['limitexceednotification'] = '<p>Sorry! You have created <b>{$a->count}</b> test-user accounts.</p> '
         . '<p>Username : {$a->username} allowed to create maximum of 15 test-user accounts. You have exceeded the limit.</p> '
         . '<p>Please re-use existing test-user accounts</p>';
-$string['limtexceedmessage'] = 'Username:{$a->username} created {$a->count} test-users accounts. Max limit:{$a->maxlimit}.';
+$string['limitexceedmessage'] = 'Username:{$a->username} created {$a->count} test-users accounts. Max limit:{$a->maxlimit}.';
+$string['pwdplaintext'] = '<p>Password for above test-user accounts  :  <b>{$a}</b> </p> '
+        . '<p>Note:Please note down this password and keep it safe. The only way to retrieve password is by asking ucl support to reset password</p>';
 
 //capability
 $string['testaccount_automation:create'] = 'Create Test User Accounts';

@@ -74,13 +74,13 @@ class testaccount_automation_form extends moodleform {
         //number of test-user accounts must not exceed MAX_ACCOUNTS_LIMIT=15 limit
         if(!empty($data->numtestaccounts)){
             $counttestusers = $DB->count_records('testaccounts', array('courseadminid' => $USER->id, 'active' => 1));
-            $currentcount = $data->numtestaccounts + MAX_ACCOUNTS_LIMIT;
+            $currentcount = $data->numtestaccounts + $counttestusers;
             if($currentcount > MAX_ACCOUNTS_LIMIT){
                 $a = new stdClass();
                 $a->username = $USER->username;
                 $a->count = $counttestusers; 
                 $a->maxlimit = MAX_ACCOUNTS_LIMIT;
-                $err['numtestaccounts'] = get_string('limtexceedmessage', 'local_testaccount_automation', $a);
+                $err['numtestaccounts'] = get_string('limitexceedmessage', 'local_testaccount_automation', $a);
             }
         }
         
@@ -93,10 +93,8 @@ class testaccount_automation_form extends moodleform {
         }
             
         // validate email-address for test-user accounts 
-        if(!empty($data->testaccountemail)){
-            if (!validate_email($data->testaccountemail)) {
-                $err['testaccountemail'] = get_string('invalidemail');
-            }
+        if (!validate_email($data->testaccountemail)) {
+            $err['testaccountemail'] = get_string('invalidemail');
         }
         
         

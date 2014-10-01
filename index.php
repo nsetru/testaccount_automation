@@ -81,13 +81,19 @@ if ($testaccountform->is_cancelled()){
     //echo html_writer::tag('p', get_string('successnotification', 'local_testaccount_notification'));
     $table = testaccount_automation_printtable($returndata);
     echo html_writer::table($table);
+    //---- display pwd for test-user accounts
+    //Not ideal to display plaintext password on screen. But, better than sending a plain text password via email...
+    //TODO:: remove this hack once we develop feature to allow users to edit their test-accounts passwords
+    $tmppwd = $from_testaccountform->testaccountpwd;
+    echo $OUTPUT->notification(get_string('pwdplaintext', 'local_testaccount_automation', $tmppwd));
+    echo '<br /><br />';
+    //----------
     $actionurl = new moodle_url('/course/view.php', array('id' => $courseid));
     $continue = new single_button($actionurl, get_string('continue'), 'post');
     echo $OUTPUT->render($continue);
     echo $OUTPUT->box_end();
     echo $OUTPUT->footer();
-    die;
-     
+    die;   
 } 
 
 echo $OUTPUT->header();
