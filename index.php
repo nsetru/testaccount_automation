@@ -13,6 +13,8 @@ require($CFG->dirroot.'/local/testaccount_automation/forms/testaccount_automatio
 require($CFG->dirroot.'/local/testaccount_automation/lib.php');
 require($CFG->dirroot.'/local/testaccount_automation/classes/testaccount_automation_create.php');
 
+define('MAX_ACCOUNTS_LIMIT', 15);
+
 // we need courseid to know- which course user test accounts needs to be enrolled
 $courseid = optional_param('course', 0, PARAM_INT);
 

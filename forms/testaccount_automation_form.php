@@ -57,15 +57,6 @@ class testaccount_automation_form extends moodleform {
         $mform->addRule('testaccountemail', get_string('required'), 'required', null, 'client');
         $mform->setType('testaccountemail', PARAM_EMAIL);
         
-        //$mform->addElement('select', 'courses', get_string('courses','local_testaccount_automation'), $options);
-        /*$buttonarray=array();
-        $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('savechanges'));
-        $buttonarray[] = &$mform->createElement('cancel');
-        $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
-        $mform->closeHeaderBefore('buttonar');*/
-        /*$mform->addElement('hidden', 'courseid');
-        $mform->setType('courseid', PARAM_INT);
-        $mform->setDefault('courseid', $courseid);*/
         $mform->addElement('hidden', 'course', null);
         $mform->setType('course', PARAM_INT);
         $mform->setDefault('course', $courseid);
@@ -74,11 +65,26 @@ class testaccount_automation_form extends moodleform {
     }
     
     function validation($data, $files) {
+        global $DB, $USER;
         parent::validation($data, $files);
         
         $data = (object)$data;
         $err = array();
         
+        //number of test-user accounts must not exceed MAX_ACCOUNTS_LIMIT=15 limit
+        if(!empty($data->numtestaccounts)){
+            $counttestusers = $DB->count_records('testaccounts', array('courseadminid' => $USER->id, 'active' => 1));
+            $currentcount = $data->numtestaccounts + MAX_ACCOUNTS_LIMIT;
+            if($currentcount > MAX_ACCOUNTS_LIMIT){
+                $a = new stdClass();
+                $a->username = $USER->username;
+                $a->count = $counttestusers; 
+                $a->maxlimit = MAX_ACCOUNTS_LIMIT;
+                $err['numtestaccounts'] = get_string('limtexceedmessage', 'local_testaccount_automation', $a);
+            }
+        }
+        
+        // password entered should be as per password policy
         if (!empty($data->testaccountpwd)) {
             $error = '';
             if(!check_password_policy($data->testaccountpwd, $error)){
@@ -86,11 +92,13 @@ class testaccount_automation_form extends moodleform {
             }
         }
             
+        // validate email-address for test-user accounts 
         if(!empty($data->testaccountemail)){
             if (!validate_email($data->testaccountemail)) {
                 $err['testaccountemail'] = get_string('invalidemail');
             }
         }
+        
         
         if (count($err) == 0){
             return true;

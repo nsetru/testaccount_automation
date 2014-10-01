@@ -119,12 +119,12 @@ function local_testaccount_automation_cron(){
     mtrace('Delete expired test-user accounts.. ');
     // get expiry date of all test users
     $currenttime = time();
-    $sql = 'SELECT * from {testaccounts} where dateexpired < :currenttime';
+    $sql = 'SELECT * from {testaccounts} where dateexpired < :currenttime and active=1';
     $expiredtestusers = $DB->get_records_sql($sql, array('currenttime' => $currenttime));
     // get test-user accounts that have passed expired date
     if(!empty($expiredtestusers)){
         foreach($expiredtestusers as $testuser){
-            $user = $DB->get_record('user', array('id' => $testuser->testaccountid));
+            $user = $DB->get_record('user', array('id' => $testuser->testaccountid, 'deleted' => 1));
             
             try{
                 // delete user from mdl_user table and un-enrol from activities and courses by calling standard delete_user() moodle core funcion 

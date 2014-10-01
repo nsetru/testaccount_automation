@@ -32,6 +32,7 @@ $string['successnotification'] = 'Test-user accounts created for user : {$a}';
 $string['limitexceednotification'] = '<p>Sorry! You have created <b>{$a->count}</b> test-user accounts.</p> '
         . '<p>Username : {$a->username} allowed to create maximum of 15 test-user accounts. You have exceeded the limit.</p> '
         . '<p>Please re-use existing test-user accounts</p>';
+$string['limtexceedmessage'] = 'Username:{$a->username} created {$a->count} test-users accounts. Max limit:{$a->maxlimit}';
 
 //capability
 $string['testaccount_automation:create'] = 'Create Test User Accounts';
