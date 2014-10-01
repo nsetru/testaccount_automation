@@ -23,7 +23,7 @@ class testaccount_automation_create {
         
         $testaccountscount = $DB->count_records('testaccounts', array('courseadminid' => $courseadmin->id, 'active' => 1));
         if($testaccountscount >= self::MAX_ACCOUNTS_LIMIT){
-            return true;
+            return $testaccountscount;
         }else{
             return false;
         }

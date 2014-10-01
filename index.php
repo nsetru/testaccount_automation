@@ -39,7 +39,12 @@ $class = new testaccount_automation_create();
 $limitexceeds = $class->testaccount_automation_checklimitexceeds($courseadmin);
 if($limitexceeds){
     echo $OUTPUT->header();
-    echo $OUTPUT->heading(get_string('limitexceednotification', 'local_testaccount_automation', $courseadmin->username));
+    
+    $a = new stdClass();
+    $a->count = $limitexceeds;
+    $a->username = $courseadmin->username;
+    echo $OUTPUT->heading(get_string('limitexceednotification', 'local_testaccount_automation', $a));
+    
     echo $OUTPUT->box_start('generalbox boxaligncenter boxwidthwide');
     //echo html_writer::tag('p', get_string('successnotification', 'local_testaccount_notification'));
     $table = testaccount_automation_printalltestusers($courseadmin);
@@ -49,6 +54,7 @@ if($limitexceeds){
     echo $OUTPUT->render($continue);
     echo $OUTPUT->box_end();
     echo $OUTPUT->footer();
+    
     die;
 }
 

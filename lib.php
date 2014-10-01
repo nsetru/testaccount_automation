@@ -39,8 +39,31 @@ function testaccount_automation_printtable($users){
 
 function testaccount_automation_printalltestusers($courseadmin){
     global $DB;
-
-
+    
+    $table = new html_table();
+    $table->width = "95%";
+    $table->head = array('username', 'fullname', 'email', 'created date', 'expiry date');
+    $columns = array('username','fullname', 'email', 'created date', 'expiry date');
+    
+    //get all test-users created by courseadmin
+    $testusers = $DB->get_records('testaccounts', array('courseadminid' => $courseadmin->id, 'active' => 1));
+    $namefields = get_all_user_name_fields(true);
+    foreach($testusers as $testuser){
+        //get other details of testuser  from mdl_user table
+        $userdetail = $DB->get_record('user', array('id' => $testuser->id));
+        $testuser->fullname = fullname($userdetail, true);
+        $datecreated = date('d-m-Y', $testuser->datecreated);
+        $dateexpiry = date('d-m-Y', $testuser->dateexpired);
+        $table->data[] = array (
+            '<a href="'.$CFG->wwwroot.'/user/view.php?id='.$testuser->id.'&amp;course='.SITEID.'">'.$userdetail->username.'</a>',
+            $testuser->fullname,
+            $userdetail->email,
+            $datecreated,
+            $dateexpiry
+        );
+    }
+    
+    return $table;
 }
 
 /**
