@@ -13,7 +13,7 @@ require($CFG->dirroot.'/local/testaccount_automation/forms/testaccount_automatio
 require($CFG->dirroot.'/local/testaccount_automation/lib.php');
 require($CFG->dirroot.'/local/testaccount_automation/classes/testaccount_automation_create.php');
 
-define('MAX_ACCOUNTS_LIMIT', 15);
+define('MAX_ACCOUNTS_LIMIT', 15); //max test-user accounts a user can create
 
 // we need courseid to know- which course user test accounts needs to be enrolled
 $courseid = optional_param('course', 0, PARAM_INT);
@@ -36,8 +36,10 @@ $courseadmin->id = $USER->id;
 $courseadmin->username = $USER->username;
 $courseadmin->email = $USER->email;
 
-// check if user has already exhausted on number of test accounts allowed to create. max limit-15
+//initialise class
 $class = new testaccount_automation_create();
+
+// check if user has already exhausted on number of test accounts allowed to create. max limit-15
 $limitexceeds = $class->testaccount_automation_checklimitexceeds($courseadmin);
 if($limitexceeds){
     echo $OUTPUT->header();
@@ -67,12 +69,7 @@ $testaccountform->set_data(array('testaccountemail' => $USER->email));
 if ($testaccountform->is_cancelled()){
     redirect($redirecturl);
 } else if ($from_testaccountform = $testaccountform->get_data()){
-    /*$courseadmin = (object)$courseadmin;
-    $courseadmin->id = $USER->id;
-    $courseadmin->username = $USER->username;
-    $courseadmin->email = $USER->email;*/
-    //process form data
-    //$class = new testaccount_automation_create();
+    
     $returndata = $class->testaccount_automation_processuserdata($from_testaccountform, $courseadmin);
     
     echo $OUTPUT->header();
@@ -81,6 +78,7 @@ if ($testaccountform->is_cancelled()){
     //echo html_writer::tag('p', get_string('successnotification', 'local_testaccount_notification'));
     $table = testaccount_automation_printtable($returndata);
     echo html_writer::table($table);
+    
     //---- display pwd for test-user accounts
     //Not ideal to display plaintext password on screen. But, better than sending a plain text password via email...
     //TODO:: remove this hack once we develop feature to allow users to edit their test-accounts passwords
@@ -88,6 +86,7 @@ if ($testaccountform->is_cancelled()){
     echo $OUTPUT->notification(get_string('pwdplaintext', 'local_testaccount_automation', $tmppwd));
     echo '<br /><br />';
     //----------
+    
     $actionurl = new moodle_url('/course/view.php', array('id' => $courseid));
     $continue = new single_button($actionurl, get_string('continue'), 'post');
     echo $OUTPUT->render($continue);
