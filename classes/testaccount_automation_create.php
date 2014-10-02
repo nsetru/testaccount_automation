@@ -51,11 +51,17 @@ class testaccount_automation_create {
                 $testuseraccountid = $this->testaccount_automation_createtestuser($formdata, $courseadmin);
             }
 
-            //populate array with created test user accounts
             if (!empty($testuseraccountid)) {
+                //enrol users
+                $enrolresult = $this->testaccount_automation_enroluser($testuseraccountid, $formdata->course, $courseadmin);
+                if($enrolresult != 'true'){
+                    $testuserscreated['enrol_error'] = $enrolresult;
+                }
+                
+                //populate array with created test user accounts
                 $testuserscreated[$testuseraccountid] = $formdata->username; 
             } else {
-                $testuserscreated['error'] = 'Could not create test user account - $testaccountdata->username';
+                $testuserscreated['user_error'] = 'Could not create test user account - $testaccountdata->username';
             }
 
             $i++;
@@ -157,6 +163,111 @@ class testaccount_automation_create {
     
     /**
      * 
+     * @param type $userid
+     * @param type $courseid
+     */
+    private function testaccount_automation_enroluser($userid, $courseid, $courseadmin){
+        global $CFG, $DB;
+        
+        //get course details
+        $course = $DB->get_record('course', array('id' => $courseid));
+        
+        $context = context_course::instance($course->id, MUST_EXIST);
+
+        //get roleid of a student
+        $studentroleid = $DB->get_field('role', 'id', array('shortname' => 'student'));
+
+        //get duration on the manual plugin for that course
+        $enrol = $DB->get_record('enrol', array('courseid' => $course->id, 'enrol' => 'manual'));
+        
+        //get current user roles(roleid, name)
+        $userroles = get_user_roles($context, $courseadmin->id, false);
+        foreach($userroles as $userrole){
+            $rolename = $DB->get_field('role', 'name', array('id' => $userrole->roleid));
+            $currentuserroles[$userrole->roleid] = $rolename;
+        }
+        
+        require_once($CFG->libdir . '/enrollib.php');
+        
+        // Rollback all enrolment if an error occurs
+        // (except if the DB doesn't support it).
+        // Retrieve the manual enrolment plugin.
+        $transaction = $DB->start_delegated_transaction(); 
+        
+        $enrol = enrol_get_plugin('manual');
+        
+        if (empty($enrol)) {
+            //throw new moodle_exception('manualpluginnotinstalled', 'enrol_manual');
+            $errormsg = get_string('manualpluginnotinstalled', 'enrol_manual');
+            return $errormsg;
+        }
+
+        // Check that the user has the permission to manual enrol.
+        require_capability('enrol/manual:enrol', $context);
+
+        // Throw an exception if user is not able to assign the role.
+        //TODO::make this work
+        $roles = get_assignable_roles($context);
+        /*if (!array_key_exists($currentuserroles, $roles)) {
+            $errorparams = new stdClass();
+            $errorparams->roleid = $studentroleid;
+            $errorparams->courseid = $course->id;
+            $errorparams->userid = $userid;
+            //throw new moodle_exception('wsusercannotassign', 'enrol_manual', '', $errorparams);
+            $errormsg = get_string('wsusercannotassign', 'enrol_manual', $errorparams);
+            return $errormsg;
+        }*/
+
+        // Check manual enrolment plugin instance is enabled/exist.
+        $instance = null;
+        $enrolinstances = enrol_get_instances($course->id, true);
+        foreach ($enrolinstances as $courseenrolinstance) {
+
+            if ($courseenrolinstance->enrol == "manual") {
+                $instance = $courseenrolinstance;
+                break;
+            }
+        }
+        if (empty($instance)) {
+            $errorparams = new stdClass();
+            $errorparams->courseid = $course->id;
+            //throw new moodle_exception('wsnoinstance', 'enrol_manual', $errorparams);
+            $errormsg = get_string('wsnoinstance', 'enrol_manual', $errorparams);
+            return $errormsg;
+        }
+
+        // Check that the plugin accept enrolment (it should always the case, it's hard coded in the plugin).
+        if (!$enrol->allow_enrol($instance)) {
+            $errorparams = new stdClass();
+            $errorparams->roleid = $studentroleid;
+            $errorparams->courseid = $course->id;
+            $errorparams->userid = $userid;
+            //throw new moodle_exception('wscannotenrol', 'enrol_manual', '', $errorparams);
+            $errormsg = get_string('wscannotenrol', 'enrol_manual', $errorparams);
+            return $errormsg;
+        }
+
+         //calculate timestart 
+        $today = time();
+        $today = make_timestamp(date('Y', $today), date('m', $today), date('d', $today), 0, 0, 0);
+        $timestart = $today;
+
+        //calculate timeend
+        if ($enrolperiod <= 0) {
+            $timeend = 0;
+        } else {
+            $timeend = $timestart + ($enrol->enrolperiod * 24 * 60 * 60);
+        }
+
+        $enrol->enrol_user($instance, $userid, $studentroleid, $timestart, $timeend);
+
+
+        $transaction->allow_commit();
+        
+        return 'true';
+    }
+    /**
+     * 
      * @global type $DB
      * @param type $testusers
      * @param stdClass $courseadmin
@@ -168,10 +279,17 @@ class testaccount_automation_create {
         $testuserscount = count($testusers);
 
         //email meesage body
-        $message = "<head> You have created $testuserscount test-user accounts. These test-user accounts are owned by Username:$courseadmin->username . </head>"
+        $message = "<head> Dear $touser->firstname $touser->lastname <br /><br />You have created $testuserscount accounts.  </head>"
                 . "<br /><br />"
-                . "<body id=\"email\"><table border=\"0\" cellpadding=\"3\" cellspacing=\"0\" width=\"95%\">";
-        $message .= "<tr>"
+                . "<body id=\"email\">"
+                . "<p>Each account is associated with your your username : $courseadmin->username. You are responsible for how they are used. It's important that you adhere to the following:</p>"
+                . "<li> Do not upgrade the accounts to Tutor or Course administrator roles within Moodle.</li>"
+                . "<li> Do not share the accounts with colleagues - they are able to create their own test accounts if they need to.</li>"
+                . "<p><i>Note that these are ‘Moodle only’ accounts and will not give access to any other UCL services e.g Lecturecast, Library Journals etc.</i><p>"
+                . "<p>More Information about how these accounts can be used may be found <a href=\"https://wiki.ucl.ac.uk/display/MoodleResourceCentre/Student+Test+Accounts+for+Moodle\">here</a></p>"
+                . "<br /><br />";
+        $message .= "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\" width=\"95%\">"
+                . "<tr>"
                 . "<th>user</th>"
                 . "<th>fullname</th>"
                 . "<th>email</th>"
@@ -195,8 +313,7 @@ class testaccount_automation_create {
         }
         $message .= "</table><br />";
         
-        $message .= "<p><b>Please note: These test-user accounts will be deleted after expiry date and can no longer be accessed.</b></p>"
-                . "</body>";
+        $message .= "</body>";
         
         $messagehtml = $message;
         $messagetext = html_to_text($message);
