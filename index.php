@@ -16,11 +16,17 @@ require($CFG->dirroot.'/local/testaccount_automation/classes/testaccount_automat
 define('MAX_ACCOUNTS_LIMIT', 15); //max test-user accounts a user can create
 
 // we need courseid to know- which course user test accounts needs to be enrolled
-$courseid = optional_param('course', 0, PARAM_INT);
+//$courseid = optional_param('course', 0, PARAM_INT);
+$courseid = required_param('course', PARAM_INT);
 
 global $PAGE, $OUTPUT, $USER;
 
-require_login();
+//require_login();
+$course = $DB->get_record('course', array('id'=>$courseid), '*', MUST_EXIST);
+$context = context_course::instance($course->id, MUST_EXIST);
+
+require_login($course);
+require_capability('local/testaccount_automation:create', $context);
 
 $redirecturl = new moodle_url('/course/view.php', array('id' => $courseid));
 

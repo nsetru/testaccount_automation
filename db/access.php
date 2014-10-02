@@ -14,16 +14,16 @@ defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
 
-    'local/testaccount_automation:create' => array( // works in CONTEXT_SYSTEM only
+    'local/testaccount_automation:create' => array( // works in CONTEXT_COURSE only
 
-        'riskbitmask' => RISK_SPAM,
+        'riskbitmask' => RISK_SPAM | RISK_PERSONAL | RISK_XSS,
 
         'captype' => 'write',
-        'contextlevel' => CONTEXT_SYSTEM,
+        'contextlevel' => CONTEXT_COURSE,
         'archetypes' => array(
-            'user' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW
-        )
+        ),
     ),
 
 );
