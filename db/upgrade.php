@@ -1,7 +1,7 @@
 <?php
 
 // This file keeps track of upgrades to
-// the chat module
+// the testaccount_automation
 //
 // Sometimes, changes between versions involve
 // alterations to database structures and other

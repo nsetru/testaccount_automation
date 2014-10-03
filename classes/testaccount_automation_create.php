@@ -152,6 +152,12 @@ class testaccount_automation_create {
         }
     }
     
+    /**
+     * 
+     * @param type $datecreated
+     * @param type $days
+     * @return boolean
+     */
     private function testaccount_automation_getexpirydate($datecreated, $days){
         if(!empty($datecreated) && !empty($days)){
             $dateexpired = strtotime('+'.$days.' days', $datecreated);
@@ -266,6 +272,8 @@ class testaccount_automation_create {
         
         return 'true';
     }
+    
+    
     /**
      * 
      * @global type $DB
