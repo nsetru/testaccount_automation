@@ -124,7 +124,7 @@ function local_testaccount_automation_cron(){
     // get test-user accounts that have passed expired date
     if(!empty($expiredtestusers)){
         foreach($expiredtestusers as $testuser){
-            $user = $DB->get_record('user', array('id' => $testuser->testaccountid, 'deleted' => 1));
+            $user = $DB->get_record('user', array('id' => $testuser->testaccountid, 'deleted' => 0));
             
             try{
                 // delete user from mdl_user table and un-enrol from activities and courses by calling standard delete_user() moodle core funcion 

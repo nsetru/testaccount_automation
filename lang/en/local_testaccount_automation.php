@@ -29,8 +29,7 @@ $string['numofdays_help'] = 'Your test accounts will be active for the number of
         . 'and all student data associated with them (forum postings, assignment uploads etc.) will be deleted from Moodle.';
 $string['testaccountpwd'] = 'Password for Test Accounts';
 $string['testaccountpwd_help'] = "Please make a note of your chosen password before clicking 'Create my test accounts' below - 
-    if you fail to do this and forget the password you will have to wait until the accounts expire before you can apply for more.
-    (can we change the ‘Save’ button to ‘Create my test accounts’  ?  if not change above text to ‘Save’ where appropriate)";
+    if you fail to do this and forget the password you will have to wait until the accounts expire before you can apply for more.";
 $string['testaccountemail'] = 'Email for Test Accounts';
 $string['testaccountemail_help'] = 'All Moodle communications to your test students will be sent to the address shown. '
         . 'If you prefer, you can change the default address to another mailbox that you have access to.';
@@ -40,7 +39,7 @@ $string['limitexceednotification'] = '<p>Sorry! You have created <b>{$a->count}<
         . '<p>Please re-use existing test-user accounts</p>';
 $string['limitexceedmessage'] = 'Username:{$a->username} created {$a->count} test-users accounts. Max limit:{$a->maxlimit}.';
 $string['pwdplaintext'] = '<p>Password for above test-user accounts  :  <b>{$a}</b> </p> '
-        . '<p>Note:Please note down this password and keep it safe. The only way to retrieve password is by asking ucl support to reset password</p>';
+        . '<p>Note:Please note down this password and keep it safe.</p>';
 
 //capability
 $string['testaccount_automation:create'] = 'Create Test User Accounts';
