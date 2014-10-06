@@ -61,7 +61,23 @@ class testaccount_automation_form extends moodleform {
         $mform->setType('course', PARAM_INT);
         $mform->setDefault('course', $courseid);
         
-        $this->add_action_buttons(true);
+        $this->add_action_buttons(true, get_string('savemychanges', 'local_testaccount_automation'));
+    }
+    
+    /**
+     * Add action buttons.
+     *
+     * @param bool $cancel whether to show cancel button, default true
+     * @param string $submitlabel label for submit button, defaults to get_string('savechanges')
+     * @return void
+     */
+    public function add_action_buttons($cancel = true, $submitlabel = null) {
+        $mform =& $this->_form;
+        $buttonarray = array();
+        $buttonarray[] = &$mform->createElement('submit', 'submitbutton', $submitlabel);
+        $buttonarray[] = &$mform->createElement('cancel');
+        $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
+        $mform->closeHeaderBefore('buttonar');
     }
     
     function validation($data, $files) {

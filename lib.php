@@ -38,7 +38,7 @@ function testaccount_automation_printtable($users){
 }
 
 function testaccount_automation_printalltestusers($courseadmin){
-    global $DB;
+    global $DB, $CFG;
     
     $table = new html_table();
     $table->width = "95%";

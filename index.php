@@ -37,7 +37,8 @@ $PAGE->set_heading('Test Account Automation');
 
 
 // set courseadmin details
-$courseadmin = (object) $courseadmin;
+//$courseadmin = (object) $courseadmin;
+$courseadmin = new stdClass();
 $courseadmin->id = $USER->id;
 $courseadmin->username = $USER->username;
 $courseadmin->email = $USER->email;
@@ -63,6 +64,13 @@ if($limitexceeds){
     $continue = new single_button($actionurl, get_string('continue'), 'post');
     echo $OUTPUT->render($continue);
     echo $OUTPUT->box_end();
+    
+    echo html_writer::start_tag('p');
+    $path = "https://wiki.ucl.ac.uk/display/MoodleResourceCentre/Student+Test+Accounts+for+Moodle";
+    $text = 'Wiki text';
+    echo $OUTPUT->doc_link($path, $text, true);
+    echo html_writer::end_tag('p');
+    
     echo $OUTPUT->footer();
     
     die;
