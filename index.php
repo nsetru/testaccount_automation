@@ -65,9 +65,10 @@ if($limitexceeds){
     echo $OUTPUT->render($continue);
     echo $OUTPUT->box_end();
     
+    //display link to help documentation in wiki
     echo html_writer::start_tag('p');
     $path = "https://wiki.ucl.ac.uk/display/MoodleResourceCentre/Student+Test+Accounts+for+Moodle";
-    $text = 'Wiki text';
+    $text = 'Wiki';
     echo $OUTPUT->doc_link($path, $text, true);
     echo html_writer::end_tag('p');
     
@@ -105,6 +106,14 @@ if ($testaccountform->is_cancelled()){
     $continue = new single_button($actionurl, get_string('continue'), 'post');
     echo $OUTPUT->render($continue);
     echo $OUTPUT->box_end();
+    
+    //display link to help documentation in wiki
+    echo html_writer::start_tag('p');
+    $path = "https://wiki.ucl.ac.uk/display/MoodleResourceCentre/Student+Test+Accounts+for+Moodle";
+    $text = 'Wiki';
+    echo $OUTPUT->doc_link($path, $text, true);
+    echo html_writer::end_tag('p');
+    
     echo $OUTPUT->footer();
     die;   
 } 
@@ -112,4 +121,12 @@ if ($testaccountform->is_cancelled()){
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('outputheading', 'local_testaccount_automation'));
 $testaccountform->display();
+
+//display link to help documentation in wiki
+echo html_writer::start_tag('p');
+$path = "https://wiki.ucl.ac.uk/display/MoodleResourceCentre/Student+Test+Accounts+for+Moodle";
+$text = 'Wiki';
+echo $OUTPUT->doc_link($path, $text, true);
+echo html_writer::end_tag('p');
+
 echo $OUTPUT->footer();
