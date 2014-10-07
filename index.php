@@ -67,8 +67,8 @@ if($limitexceeds){
     
     //display link to help documentation in wiki
     echo html_writer::start_tag('p');
-    $path = "https://wiki.ucl.ac.uk/display/MoodleResourceCentre/Student+Test+Accounts+for+Moodle";
-    $text = get_string('wikilink', 'local_testaccount_automation');
+    $path = get_string('moodleresourcelink', 'local_testaccount_automation');
+    $text = get_string('moodleresource', 'local_testaccount_automation');
     echo $OUTPUT->doc_link($path, $text, true);
     echo html_writer::end_tag('p');
     
@@ -109,8 +109,8 @@ if ($testaccountform->is_cancelled()){
     
     //display link to help documentation in wiki
     echo html_writer::start_tag('p');
-    $path = "https://wiki.ucl.ac.uk/display/MoodleResourceCentre/Student+Test+Accounts+for+Moodle";
-    $text = get_string('wikilink', 'local_testaccount_automation');
+    $path = get_string('moodleresourcelink', 'local_testaccount_automation');
+    $text = get_string('moodleresource', 'local_testaccount_automation');
     echo $OUTPUT->doc_link($path, $text, true);
     echo html_writer::end_tag('p');
     
@@ -124,8 +124,8 @@ $testaccountform->display();
 
 //display link to help documentation in wiki
 echo html_writer::start_tag('p');
-$path = "https://wiki.ucl.ac.uk/display/MoodleResourceCentre/Student+Test+Accounts+for+Moodle";
-$text = get_string('wikilink', 'local_testaccount_automation');
+$path = get_string('moodleresourcelink', 'local_testaccount_automation');
+$text = get_string('moodleresource', 'local_testaccount_automation');
 echo $OUTPUT->doc_link($path, $text, true);
 echo html_writer::end_tag('p');
 
