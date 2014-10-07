@@ -18,6 +18,7 @@
 $string['pluginname'] = 'Test accounts automation';
 $string['createtestaccounts'] = 'Create Test User Accounts';
 $string['outputheading'] = 'Request Moodle student test accounts';
+$string['wikilink'] = 'Moodle resource';
 
 //form 
 $string['numtestaccounts'] = 'Number of Test Accounts';
