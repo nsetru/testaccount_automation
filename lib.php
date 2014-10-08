@@ -12,6 +12,7 @@
 require_once ("$CFG->dirroot/user/lib.php");
 
 /**
+ * Function to print details on test accounts after successful creation
  * 
  * @global type $DB
  * @param type $users
@@ -37,6 +38,14 @@ function testaccount_automation_printtable($users){
     return $table;
 }
 
+/**
+ * Function to print all test users owned by a user after exceeding max limit
+ * 
+ * @global type $DB
+ * @global type $CFG
+ * @param type $courseadmin
+ * @return \html_table
+ */
 function testaccount_automation_printalltestusers($courseadmin){
     global $DB, $CFG;
     
@@ -67,7 +76,7 @@ function testaccount_automation_printalltestusers($courseadmin){
 }
 
 /**
- * function to extend
+ * Function to extend navigation block. Adds 'Create Test Accounts' item under 'course administration'
  * 
  * @global type $CFG
  * @global type $PAGE
@@ -76,7 +85,7 @@ function testaccount_automation_printalltestusers($courseadmin){
  * @return type
  */
 function local_testaccount_automation_extends_settings_navigation($settingsnav, $context) {
-    global $CFG, $PAGE;
+    global $CFG, $PAGE, $USER;
  
     // Only add this settings item on non-site course pages.
     if (!$PAGE->course or $PAGE->course->id == 1) {
@@ -87,22 +96,19 @@ function local_testaccount_automation_extends_settings_navigation($settingsnav, 
     if (!has_capability('moodle/backup:backupcourse', context_course::instance($PAGE->course->id))) {
         return;
     }
- 
-    if ($settingnode = $settingsnav->find('courseadmin', navigation_node::TYPE_COURSE)) {
-        $strfoo = get_string('createtestaccounts', 'local_testaccount_automation');
-        $url = new moodle_url('/local/testaccount_automation/index.php', array('course' => $PAGE->course->id));
-        $foonode = navigation_node::create(
-            $strfoo,
-            $url,
-            navigation_node::NODETYPE_LEAF,
-            'testaccount_automation',
-            'testaccount_automation',
-            new pix_icon('t/addcontact', $strfoo)
-        );
-        if ($PAGE->url->compare($url, URL_MATCH_BASE)) {
-            $foonode->make_active();
+    
+    if (is_siteadmin($USER->id)) {
+        if ($settingnode = $settingsnav->find('courseadmin', navigation_node::TYPE_COURSE)) {
+            $strfoo = get_string('createtestaccounts', 'local_testaccount_automation');
+            $url = new moodle_url('/local/testaccount_automation/index.php', array('course' => $PAGE->course->id));
+            $foonode = navigation_node::create(
+                            $strfoo, $url, navigation_node::NODETYPE_LEAF, 'testaccount_automation', 'testaccount_automation', new pix_icon('t/addcontact', $strfoo)
+            );
+            if ($PAGE->url->compare($url, URL_MATCH_BASE)) {
+                $foonode->make_active();
+            }
+            $settingnode->add_node($foonode);
         }
-        $settingnode->add_node($foonode);
     }
 }
 
@@ -110,7 +116,6 @@ function local_testaccount_automation_extends_settings_navigation($settingsnav, 
 /**
  * Cron to delete expired test-user accounts
  * 
- * set cron job function 
  * @global type $DB
  */
 function local_testaccount_automation_cron(){

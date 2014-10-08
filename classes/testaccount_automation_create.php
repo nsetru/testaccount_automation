@@ -4,7 +4,8 @@
 require_once ("$CFG->dirroot/user/lib.php");
 
 /**
- * Description of testaccount_automation_create
+ * Class testaccount_automation_create
+ * 
  *
  * @author cceanse
  */
@@ -13,6 +14,7 @@ class testaccount_automation_create {
     const MAX_ACCOUNTS_LIMIT   =   15; //max test-user accounts a user can create
     
     /**
+     * Function to count number of test accounts created by user
      * 
      * @global type $DB
      * @param stdClass $courseadmin
@@ -30,9 +32,10 @@ class testaccount_automation_create {
     }
     
     /**
+     * Function to process data submitted by user using form
      * 
-     * @param type $testaccountdata
-     * @param type $courseadmin
+     * @param array $formdata
+     * @param stdClass $courseadmin
      * @return string
      */
     public function testaccount_automation_processuserdata($formdata, stdClass $courseadmin){
@@ -72,12 +75,13 @@ class testaccount_automation_create {
         return $testuserscreated;
     }
     
-    /**
-     * 
-     * @global type $DB
-     * @param type $courseadmin
-     * @return string
-     */
+   /**
+    * Function to generate username for test accounts to be created
+    * 
+    * @global type $DB
+    * @param stdClass $courseadmin
+    * @return string
+    */
     private function testaccount_automation_generateusername(stdClass $courseadmin){
         global $DB;
 
@@ -106,12 +110,12 @@ class testaccount_automation_create {
     }
     
     /**
+     * Function to create new moodle user.
      * 
      * @global type $CFG
      * @global type $DB
-     * @staticvar int $counter
-     * @param type $testuseraccounts
-     * @param type $courseadmin
+     * @param type $testaccountdata
+     * @param stdClass $courseadmin
      * @return boolean
      */
     private function testaccount_automation_createtestuser($testaccountdata, stdClass $courseadmin){
@@ -153,6 +157,7 @@ class testaccount_automation_create {
     }
     
     /**
+     * Function to return enpiry date
      * 
      * @param type $datecreated
      * @param type $days
@@ -167,11 +172,16 @@ class testaccount_automation_create {
         return false;
     }
     
-    /**
-     * 
-     * @param type $userid
-     * @param type $courseid
-     */
+   /**
+    * Function to enrol user to a course
+    * 
+    * @global type $CFG
+    * @global type $DB
+    * @param type $userid
+    * @param type $courseid
+    * @param type $courseadmin
+    * @return string
+    */
     private function testaccount_automation_enroluser($userid, $courseid, $courseadmin){
         global $CFG, $DB;
         
@@ -264,9 +274,9 @@ class testaccount_automation_create {
         } else {
             $timeend = $timestart + ($enrol->enrolperiod * 24 * 60 * 60);
         }
-
+        
+        //call standard enrol_user() moodle function to enrol users to a course 
         $enrol->enrol_user($instance, $userid, $studentroleid, $timestart, $timeend);
-
 
         $transaction->allow_commit();
         
@@ -275,6 +285,7 @@ class testaccount_automation_create {
     
     
     /**
+     * Function to send email to user with details of test accounts created
      * 
      * @global type $DB
      * @param type $testusers
