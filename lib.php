@@ -59,7 +59,7 @@ function testaccount_automation_printalltestusers($courseadmin){
     $namefields = get_all_user_name_fields(true);
     foreach($testusers as $testuser){
         //get other details of testuser  from mdl_user table
-        $userdetail = $DB->get_record('user', array('id' => $testuser->id));
+        $userdetail = $DB->get_record('user', array('id' => $testuser->testaccountid));
         $testuser->fullname = fullname($userdetail, true);
         $datecreated = date('d-m-Y', $testuser->datecreated);
         $dateexpiry = date('d-m-Y', $testuser->dateexpired);
