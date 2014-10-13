@@ -97,7 +97,7 @@ function local_testaccount_automation_extends_settings_navigation($settingsnav, 
         return;
     }
     
-    if (is_siteadmin($USER->id)) {
+    //if (is_siteadmin($USER->id)) {
         if ($settingnode = $settingsnav->find('courseadmin', navigation_node::TYPE_COURSE)) {
             $strfoo = get_string('createtestaccounts', 'local_testaccount_automation');
             $url = new moodle_url('/local/testaccount_automation/index.php', array('course' => $PAGE->course->id));
@@ -109,7 +109,7 @@ function local_testaccount_automation_extends_settings_navigation($settingsnav, 
             }
             $settingnode->add_node($foonode);
         }
-    }
+    //}
 }
 
 
