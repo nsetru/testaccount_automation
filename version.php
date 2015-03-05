@@ -1,10 +1,8 @@
 <?php
-
-
 /**
  * Version information
  *
- * @package    local
+ * @package    local_testaccount_automation
  * @subpackage testaccount_automation
  * @copyright  2014 UCL
  * @license    http://www.ucl.ac.uk

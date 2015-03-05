@@ -1,9 +1,8 @@
 <?php
-
 /**
  * Form 
  * 
- * @package local
+ * @package local_testaccount_automation
  * @subpackage testaccount_automation
  * @copyright  2014 UCL
  * @license    http://www.ucl.ac.uk
@@ -11,7 +10,7 @@
  */
 
 if (!defined('MOODLE_INTERNAL')) {
-    die('Direct access to this script is forbidden.');    ///  It must be included from a Moodle page
+    die('Direct access to this script is forbidden.');    //  It must be included from a Moodle page
 }
 
 require_once($CFG->libdir . '/formslib.php');

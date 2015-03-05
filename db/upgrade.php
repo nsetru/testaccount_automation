@@ -1,5 +1,4 @@
 <?php
-
 // This file keeps track of upgrades to
 // the testaccount_automation
 //
@@ -24,7 +23,7 @@
  * 
  * Upgrade 
  *
- * @package    local
+ * @package    local_testaccount_automation
  * @subpackage testaccount_automation
  * @copyright  2014 UCL
  * @license    http://www.ucl.ac.uk

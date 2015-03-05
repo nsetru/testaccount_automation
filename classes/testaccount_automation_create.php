@@ -1,6 +1,4 @@
 <?php
-
-
 require_once ("$CFG->dirroot/user/lib.php");
 
 /**
@@ -10,9 +8,8 @@ require_once ("$CFG->dirroot/user/lib.php");
  * @author cceanse
  */
 class testaccount_automation_create {
-    //define constants
-    const MAX_ACCOUNTS_LIMIT   =   15; //max test-user accounts a user can create
-    
+    // define constants
+    const MAX_ACCOUNTS_LIMIT   = 15; // Maximum test-user accounts course-admin can create
     /**
      * Function to count number of test accounts created by user
      * 
@@ -349,5 +346,4 @@ class testaccount_automation_create {
             email_to_user($touser, $supportuser, $subject, $messagetext, $messagehtml);
         }
     }
-
 }
